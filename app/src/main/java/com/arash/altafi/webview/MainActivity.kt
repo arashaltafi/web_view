@@ -1,23 +1,18 @@
 package com.arash.altafi.webview
 
 import android.annotation.SuppressLint
-import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.webkit.WebChromeClient
-import android.webkit.WebSettings
-import android.webkit.WebViewClient
 import kotlinx.android.synthetic.main.activity_main.*
-import android.content.pm.PackageManager
-import android.content.Intent
-import android.net.Uri
-import android.webkit.WebView
-import java.util.regex.Matcher
-import java.util.regex.Pattern
+import android.view.KeyEvent
+import android.view.View
+import android.webkit.*
+import java.util.*
 
 class MainActivity : AppCompatActivity() {
-    
-    private lateinit var url : String
+
+    private lateinit var url: String
+    private val cookieManager: CookieManager = CookieManager.getInstance()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,7 +44,7 @@ class MainActivity : AppCompatActivity() {
     @SuppressLint("SetJavaScriptEnabled")
     private fun initForFrameLayout() {
         url = "https://arashaltafi.ir/index2.html"
-        val webView : WebView = WebView(this)
+        val webView = WebView(this)
 
         // load link in web view
 //        webView.webViewClient = WebViewClient()
@@ -66,6 +61,38 @@ class MainActivity : AppCompatActivity() {
         webView.loadUrl(url)
 
         web_view_1.addView(webView)
+    }
+
+    private fun createCookie(webView: WebView, url: String) {
+        val cookieName = "sessionName"
+        val cookieValue = "sessionValue"
+        val cookieTime = 36000
+
+        CookieManager.getInstance().setAcceptThirdPartyCookies(webView, true)
+        cookieManager.setAcceptCookie(true)
+        val date = Date()
+        date.time = date.time + cookieTime
+        val expires = "; expires=" + date.toGMTString()
+        val cookieString = "$cookieName=$cookieValue$expires; path=/"
+        cookieManager.setCookie(url, cookieString)
+        cookieManager.flush()
+    }
+
+    private fun handleBackPress(webView: WebView) {
+        webView.setOnKeyListener(object : View.OnKeyListener {
+            override fun onKey(v: View, keyCode: Int, event: KeyEvent): Boolean {
+                if (event.action === KeyEvent.ACTION_DOWN) {
+                    when (keyCode) {
+                        KeyEvent.KEYCODE_BACK -> if (webView.canGoBack()) {
+                            webView.goBack()
+                            return true
+                        }
+                    }
+                }
+                return false
+            }
+        })
+
     }
 
 }

@@ -7,19 +7,19 @@
     android:gravity="center"
     android:orientation="vertical"
     android:padding="20dp"
-    tools:context=".MainActivity">
+    tools:context=".sample2.SampleActivity2">
 
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/btnSample1"
+        android:id="@+id/btnCustomTab"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="sample 1" />
+        android:text="open browser custom tab" />
 
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/btnSample2"
+        android:id="@+id/btnOpenBrowser"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:text="sample 2" />
+        android:layout_marginTop="20dp"
+        android:text="open browser" />
 
 </androidx.appcompat.widget.LinearLayoutCompat>
